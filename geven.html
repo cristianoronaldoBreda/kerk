@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Faith Life Breda | Geven</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+
+      /* home: minder hard zwart */
+      --dark:#1c1c1c;
+      --muted:#666666;
+
+      /* home give tint */
+      --green-give:#e1f5cc;
+
+      --line:rgba(0,0,0,0.08);
+      --sans:"Helvetica Neue", Helvetica, Arial, sans-serif;
+      --serif:'Playfair Display', serif;
+    }
+
+    *{ box-sizing:border-box; -webkit-font-smoothing: antialiased; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:var(--bg);
+      color:#000;
+      overflow-x:hidden;
+      scroll-behavior:smooth;
+    }
+    body.menu-open{ overflow:hidden; }
+    .wrap{ max-width:1200px; margin:0 auto; padding:0 6vw; }
+
+    /* --- NAV (zelfde vibe als home/pages) --- */
+    nav{
+      position: sticky;
+      top:0;
+      z-index:1000;
+      background:#fff;
+      border-bottom:1px solid rgba(0,0,0,0.05);
+      padding: 18px 5vw;
+
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      color:#000;
+      user-select:none;
+    }
+    .brand img{ height:34px; width:auto; display:block; }
+    .brand .logo-text{
+      font-weight:900;
+      font-size: clamp(18px, 4vw, 24px);
+      letter-spacing:-1px;
+      line-height:1;
+      white-space:nowrap;
+    }
+
+    .nav-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      cursor:pointer;
+      padding: 10px 12px;
+      border-radius: 12px;
+      transition: background .2s ease, transform .2s ease;
+    }
+    .nav-right:hover{ background: rgba(0,0,0,0.03); transform: translateY(-1px); }
+
+    .hamburger{ width:24px; height:18px; position:relative; }
+    .hamburger span{
+      position:absolute; left:0;
+      width:24px; height:2px;
+      background:#000;
+      transition: transform .25s ease, top .25s ease, opacity .2s ease;
+    }
+    .hamburger span:nth-child(1){ top:2px; }
+    .hamburger span:nth-child(2){ top:8px; }
+    .hamburger span:nth-child(3){ top:14px; }
+
+    .nav-right.is-open .hamburger span:nth-child(1){ top:8px; transform: rotate(45deg); }
+    .nav-right.is-open .hamburger span:nth-child(2){ opacity:0; }
+    .nav-right.is-open .hamburger span:nth-child(3){ top:8px; transform: rotate(-45deg); }
+
+    /* --- FULLSCREEN MENU --- */
+    .mobile-menu{
+      position:fixed;
+      inset:0;
+      background: rgba(18,18,18,0.94);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display:none;
+      z-index:1500;
+      align-items:center;
+      justify-content:center;
+      padding: 28px 18px;
+    }
+    .mobile-menu.active{ display:flex; }
+    .mobile-menu-inner{
+      width: min(920px, 92vw);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+      text-align:center;
+    }
+    .mobile-menu-title{
+      color: rgba(255,255,255,0.75);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
+    .mobile-menu a{
+      color:#fff;
+      text-decoration:none;
+      text-transform:uppercase;
+      font-weight:900;
+      font-size: clamp(26px, 7vw, 56px);
+      letter-spacing:-0.02em;
+      line-height:1.02;
+      padding: 8px 10px;
+      border-radius: 12px;
+      transition: transform .18s ease, opacity .18s ease;
+      opacity:.92;
+    }
+    .mobile-menu a:hover{ transform: translateY(-2px); opacity:1; }
+    .mobile-hint{
+      margin-top:18px;
+      color: rgba(255,255,255,0.55);
+      font-size:12px;
+      line-height:1.5;
+      padding: 0 8px;
+    }
+
+    /* --- HERO --- */
+    .hero{
+      padding: clamp(80px, 12vh, 140px) 0 50px;
+      text-align:center;
+    }
+    .kicker{
+      font-family:var(--serif);
+      font-style:italic;
+      color: var(--muted);
+      font-size: clamp(16px, 3vw, 24px);
+      display:block;
+      margin-bottom:10px;
+    }
+    h1{
+      font-size: clamp(50px, 10vw, 95px);
+      font-weight:900;
+      text-transform:uppercase;
+      margin:0;
+      letter-spacing:-0.05em;
+      line-height:0.9;
+    }
+    .hero p{
+      max-width: 74ch;
+      margin: 18px auto 0;
+      font-size: 18px;
+      line-height: 1.9;
+      font-weight:600;
+      color: rgba(0,0,0,0.75);
+    }
+
+    /* --- GIVE BANNER (home stijl + groen) --- */
+    .give-banner{
+      background: var(--green-give);
+      color: #000;
+      margin: 60px 5vw 0;
+      padding: clamp(40px, 8vw, 80px);
+      border-radius: 10px;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:20px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    @media (min-width: 768px){
+      .give-banner{ flex-direction:row; justify-content:space-between; align-items:center; }
+    }
+    .give-banner h2{
+      text-transform: uppercase;
+      font-size: clamp(30px, 6vw, 60px);
+      font-weight: 900;
+      margin: 0;
+      letter-spacing: -2px;
+      line-height:1;
+    }
+    .give-banner p{
+      margin-top: 14px;
+      font-weight: 700;
+      color: rgba(0,0,0,0.78);
+      line-height:1.7;
+      max-width: 62ch;
+    }
+    .btn-give-link{
+      font-weight: 900;
+      text-decoration: none;
+      color: #000;
+      border-bottom: 2px solid #000;
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      transition:.2s;
+      padding-bottom: 4px;
+      white-space:nowrap;
+    }
+    .btn-give-link:hover{ opacity:.75; transform: translateY(-1px); }
+
+    /* --- OPTIONS inside banner (1x / maandelijks) --- */
+    .options{
+      width:100%;
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media(min-width: 900px){
+      .options{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .option-card{
+      background: rgba(255,255,255,0.75);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.06);
+    }
+    .option-card h3{
+      margin:0 0 8px;
+      text-transform:uppercase;
+      font-weight:900;
+      letter-spacing:.08em;
+      font-size: 12px;
+    }
+    .option-card p{
+      margin:0 0 14px;
+      color: rgba(0,0,0,0.70);
+      font-weight: 700;
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .btn-row{ display:flex; gap:10px; flex-wrap:wrap; }
+    .btn{
+      display:inline-block;
+      padding: 14px 16px;
+      border-radius: 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .10em;
+      font-size: 11px;
+      text-decoration:none;
+      transition:.2s;
+      border: 1px solid rgba(0,0,0,0.18);
+      background:#fff;
+      color:#000;
+    }
+    .btn:hover{ transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,0.10); }
+    .btn.primary{
+      background:#000;
+      color:#fff;
+      border-color:#000;
+    }
+
+    /* --- BANK --- */
+    .bank{
+      max-width: 980px;
+      margin: 60px auto 0;
+      padding: 0 6vw;
+    }
+    .bank-card{
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.06);
+      background:#fff;
+    }
+    .bank-card h2{
+      margin:0 0 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      font-size: 22px;
+    }
+    .bank-card p{
+      margin: 8px 0;
+      font-weight: 800;
+      color: rgba(0,0,0,0.70);
+    }
+    .bank-note{
+      margin-top: 12px;
+      color: rgba(0,0,0,0.60);
+      font-weight: 700;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    footer{
+      padding:64px 0;
+      text-align:center;
+      background: var(--dark);
+      color:#888;
+      font-size:11px;
+      text-transform:uppercase;
+      margin-top: 80px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Fullscreen menu overlay -->
+  <div class="mobile-menu" id="mobileMenu" onclick="closeMenu()">
+    <div class="mobile-menu-inner" onclick="event.stopPropagation()">
+      <div class="mobile-menu-title">Pagina’s</div>
+
+      <a href="index.html" onclick="closeMenu()">Home</a>
+      <a href="visie.html" onclick="closeMenu()">Visie</a>
+      <a href="leiders.html" onclick="closeMenu()">Leiders</a>
+      <a href="geschiedenis.html" onclick="closeMenu()">Geschiedenis</a>
+      <a href="geven.html" onclick="closeMenu()">Geven</a>
+      <a href="online-kerk.html" onclick="closeMenu()">Online Kerk</a>
+
+      <div class="mobile-hint">Klik op de achtergrond of druk op <strong>ESC</strong> om te sluiten.</div>
+    </div>
+  </div>
+
+  <nav>
+    <a class="brand" href="index.html">
+      <img src="FLCI - vertical - black.png" alt="Faith Life logo">
+      <div class="logo-text">FAITH LIFE.</div>
+    </a>
+
+    <div class="nav-right" id="hamburgerBtn" onclick="toggleMenu()">
+      <div class="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <span class="kicker">Faith Life</span>
+      <h1>Maak eeuwige impact</h1>
+      <p>
+        Door dit werk financieel te ondersteunen, maak je het werk van FAITH LIFE mogelijk
+        om zo de oogst van zielen binnen gehaald te zien worden.
+      </p>
+    </div>
+  </header>
+
+  <!-- GIVE BANNER (HOME COLOR) -->
+  <section class="give-banner" id="give">
+    <div style="width:100%;">
+      <h2>Ways We Give</h2>
+      <p>
+        Jouw vrijgevigheid maakt impact. Kies hieronder voor éénmalig of maandelijks geven.
+      </p>
+
+      <div class="options">
+        <div class="option-card">
+          <h3>1 Malig geven</h3>
+          <p>Geef een éénmalige bijdrage en ondersteun direct het werk van Faith Life Church.</p>
+          <div class="btn-row">
+            <a class="btn primary" href="#" title="Koppel hier jouw betaal-link">Geef Nu →</a>
+            <a class="btn" href="#bank">Bankgegevens</a>
+          </div>
+        </div>
+
+        <div class="option-card">
+          <h3>Maandelijks geven</h3>
+          <p>Word maandelijkse partner. Jouw vaste steun bouwt mee aan de toekomst van de gemeente.</p>
+          <div class="btn-row">
+            <a class="btn primary" href="#" title="Koppel hier jouw betaal-link">Word Partner →</a>
+            <a class="btn" href="#bank">Bankgegevens</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="#bank" class="btn-give-link">Bank →</a>
+  </section>
+
+  <!-- BANK -->
+  <section class="bank" id="bank">
+    <div class="bank-card">
+      <h2>Bankgegevens</h2>
+      <p><strong>Name:</strong> _______________________</p>
+      <p><strong>IBAN:</strong> _______________________</p>
+      <p><strong>BIC:</strong> _______________________</p>
+      <div class="bank-note">
+        Tip: zodra je een betaal-link hebt (bijv. Mollie/Tikkie/Donorbox), kan ik de knoppen “Geef Nu” en “Word Partner” direct koppelen.
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Faith Life International BREDA
+  </footer>
+
+  <script>
+    // MENU
+    function openMenu() {
+      document.body.classList.add('menu-open');
+      document.getElementById('mobileMenu').classList.add('active');
+      document.getElementById('hamburgerBtn').classList.add('is-open');
+    }
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+      document.getElementById('mobileMenu').classList.remove('active');
+      document.getElementById('hamburgerBtn').classList.remove('is-open');
+    }
+    function toggleMenu() {
+      const isOpen = document.getElementById('mobileMenu').classList.contains('active');
+      if (isOpen) closeMenu();
+      else openMenu();
+    }
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+  </script>
+
+</body>
+</html>

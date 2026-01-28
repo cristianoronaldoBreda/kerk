@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Faith Life Breda | Visie</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --dark:#121212;
+      --muted:#666666;
+      --sans:"Helvetica Neue", Helvetica, Arial, sans-serif;
+      --serif:'Playfair Display', serif;
+      --card:#f6f6f6;
+      --line:rgba(0,0,0,0.08);
+    }
+
+    *{ box-sizing:border-box; -webkit-font-smoothing: antialiased; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:var(--bg);
+      color:#000;
+      overflow-x:hidden;
+      scroll-behavior:smooth;
+    }
+    body.menu-open{ overflow:hidden; }
+
+    .wrap{ max-width:1200px; margin:0 auto; padding:0 6vw; }
+
+    /* --- NAV --- */
+    nav{
+      position: sticky;
+      top:0;
+      z-index:1000;
+      background:#fff;
+      border-bottom:1px solid var(--line);
+      padding: 18px 5vw;
+
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items:center;
+      gap:16px;
+    }
+
+    .brand{
+      justify-self:start;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      user-select:none;
+      min-width:0;
+      text-decoration:none;
+      color:#000;
+    }
+    .brand img{ height:34px; width:auto; display:block; }
+    .brand .logo-text{
+      font-weight:900;
+      font-size: clamp(18px, 4vw, 24px);
+      letter-spacing:-1px;
+      line-height:1;
+      white-space:nowrap;
+    }
+
+    /* --- CENTER HOVER MENU --- */
+    .nav-links{
+      justify-self:center;
+      display:flex;
+      gap:22px;
+      align-items:center;
+      position:relative;
+    }
+    .nav-links a{
+      position:relative;
+      text-decoration:none;
+      color:#000;
+      font-weight:900;
+      text-transform:uppercase;
+      font-size:12px;
+      letter-spacing:0.08em;
+      opacity:0.82;
+      padding:10px 2px;
+      transition: transform .18s ease, opacity .18s ease;
+      white-space:nowrap;
+    }
+    .nav-links a:hover{ opacity:1; transform: translateY(-1px); }
+
+    .nav-links a::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:6px;
+      width:100%;
+      height:2px;
+      background:#000;
+      transform: scaleX(0);
+      transform-origin:left;
+      transition: transform .2s ease;
+      opacity:.85;
+    }
+    .nav-links a:hover::after{ transform: scaleX(1); }
+    .nav-links a.active{ opacity: 1; }
+    .nav-links a.active::after{ transform: scaleX(1); }
+
+    /* --- RIGHT (HAMBURGER) --- */
+    .nav-right{
+      justify-self:end;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      cursor:pointer;
+      user-select:none;
+      padding: 10px 10px;
+      border-radius: 10px;
+      transition: background .2s ease, transform .2s ease;
+    }
+    .nav-right:hover{ background: rgba(0,0,0,0.04); transform: translateY(-1px); }
+    .menu-label{
+      font-weight: 800;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      opacity: .9;
+    }
+    .hamburger{ width:24px; height:18px; position:relative; }
+    .hamburger span{
+      position:absolute;
+      left:0;
+      width:24px;
+      height:2px;
+      background:#000;
+      transition: transform .25s ease, top .25s ease, opacity .2s ease;
+    }
+    .hamburger span:nth-child(1){ top:2px; }
+    .hamburger span:nth-child(2){ top:8px; }
+    .hamburger span:nth-child(3){ top:14px; }
+
+    .nav-right.is-open .hamburger span:nth-child(1){ top:8px; transform: rotate(45deg); }
+    .nav-right.is-open .hamburger span:nth-child(2){ opacity:0; }
+    .nav-right.is-open .hamburger span:nth-child(3){ top:8px; transform: rotate(-45deg); }
+
+    @media (max-width: 860px){
+      nav{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:14px;
+      }
+      .nav-links{ display:none; }
+      .menu-label{ display:none; }
+      .brand img{ height:28px; }
+      .brand .logo-text{ font-size:18px; }
+      .nav-right{ padding:10px 8px; }
+    }
+
+    /* --- FULLSCREEN MENU --- */
+    .mobile-menu{
+      position:fixed;
+      inset:0;
+      background: rgba(18,18,18,0.96);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display:none;
+      z-index:1500;
+      align-items:center;
+      justify-content:center;
+      padding: 28px 18px;
+    }
+    .mobile-menu.active{ display:flex; }
+
+    .mobile-menu-inner{
+      width: min(920px, 92vw);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+      text-align:center;
+    }
+
+    .mobile-menu-title{
+      color: rgba(255,255,255,0.75);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
+
+    .mobile-menu a{
+      color:#fff;
+      text-decoration:none;
+      text-transform:uppercase;
+      font-weight:900;
+      font-size: clamp(26px, 7vw, 56px);
+      letter-spacing:-0.02em;
+      line-height:1.02;
+      padding: 8px 10px;
+      border-radius: 12px;
+      transition: transform .18s ease, opacity .18s ease;
+      opacity:.92;
+    }
+    .mobile-menu a:hover{ transform: translateY(-2px); opacity:1; }
+
+    .mobile-hint{
+      margin-top:18px;
+      color: rgba(255,255,255,0.55);
+      font-size:12px;
+      line-height:1.5;
+      padding: 0 8px;
+    }
+
+    /* --- HERO / HEADER --- */
+    .page-hero{
+      padding: clamp(70px, 10vh, 140px) 6vw 48px;
+      text-align:center;
+    }
+    .kicker{
+      font-family:var(--serif);
+      font-style:italic;
+      font-size: clamp(16px, 3.2vw, 24px);
+      color: var(--muted);
+      margin-bottom: 10px;
+      display:block;
+      font-weight:400;
+    }
+    .page-hero h1{
+      font-size: clamp(40px, 10vw, 92px);
+      font-weight:900;
+      letter-spacing:-0.05em;
+      line-height:0.9;
+      margin:0;
+      text-transform:uppercase;
+      text-wrap: balance;
+    }
+
+    /* --- CONTENT --- */
+    .section{
+      padding: 70px 0 90px;
+      background:#fff;
+    }
+
+    .content-grid{
+      display:grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 48px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .content-grid{ grid-template-columns: 1fr; gap: 28px; }
+    }
+
+    .lead{
+      font-size: 18px;
+      line-height: 1.8;
+      color: #111;
+      margin: 0;
+      max-width: 75ch;
+    }
+
+    .highlight{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 26px;
+    }
+    .highlight h3{
+      margin:0 0 12px;
+      text-transform: uppercase;
+      font-weight: 900;
+      letter-spacing: .08em;
+      font-size: 12px;
+      color: #111;
+    }
+    .pill-list{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+    .pill{
+      background:#fff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 12px 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: 12px;
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .pill:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.08);
+    }
+    .pill span:last-child{ opacity: .55; }
+
+    /* --- 5G SECTION (dark, horizontaal scroll zoals home) --- */
+    .values-section{
+      background: var(--dark);
+      color:#fff;
+      padding: 110px 0;
+    }
+    .values-head{
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+    .values-head h2{
+      font-size: clamp(34px, 7vw, 52px);
+      font-weight: 900;
+      text-transform: uppercase;
+      margin: 0;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .values-head p{
+      margin:0;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.6;
+      max-width: 80ch;
+      font-size: 16px;
+    }
+
+    .values-container{
+      overflow-x:auto;
+      width:100%;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .values-container::-webkit-scrollbar{ display:none; }
+
+    .values-scroll{
+      display:flex;
+      gap: 28px;
+      padding: 0 6vw;
+      width: max-content;
+    }
+
+    .value-card{
+      width: clamp(280px, 78vw, 420px);
+      border-top: 1px solid rgba(255,255,255,0.22);
+      padding-top: 24px;
+      flex-shrink:0;
+    }
+    .value-num{
+      font-size: 56px;
+      font-weight: 400;
+      -webkit-text-stroke: 1px #fff;
+      color: transparent;
+      display:block;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+    .value-card h3{
+      font-size: 22px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin: 0 0 12px;
+      letter-spacing: 0.03em;
+    }
+    .value-card p{
+      color: rgba(255,255,255,0.85);
+      line-height: 1.7;
+      margin: 0;
+      font-size: 16px;
+    }
+
+    @media (max-width: 700px){
+      .values-section{ padding: 85px 0; }
+      .values-scroll{ gap: 18px; padding: 0 6vw; }
+      .value-num{ font-size: 50px; }
+      .value-card h3{ font-size: 20px; }
+    }
+
+    /* --- QUOTE BAND --- */
+    .quote-band{
+      background: var(--dark);
+      color:#fff;
+      padding: 70px 0;
+    }
+    .quote{
+      font-size: clamp(20px, 4vw, 36px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin: 0;
+      text-align:center;
+      text-wrap: balance;
+    }
+    .quote small{
+      display:block;
+      margin-top: 14px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: 12px;
+      opacity: .7;
+    }
+
+    footer{
+      padding:64px 0;
+      text-align:center;
+      background: var(--dark);
+      color:#888;
+      font-size:11px;
+      text-transform:uppercase;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Fullscreen menu overlay -->
+  <div class="mobile-menu" id="mobileMenu" onclick="closeMenu()">
+    <div class="mobile-menu-inner" onclick="event.stopPropagation()">
+      <div class="mobile-menu-title">Pagina’s</div>
+
+      <a href="index.html" onclick="closeMenu()">Home</a>
+      <a href="visie.html" onclick="closeMenu()">Visie</a>
+      <a href="leiders.html" onclick="closeMenu()">Leiders</a>
+      <a href="geschiedenis.html" onclick="closeMenu()">Geschiedenis</a>
+      <a href="geven.html" onclick="closeMenu()">Geven</a>
+      <a href="online-kerk.html" onclick="closeMenu()">Online Kerk</a>
+
+      <div class="mobile-hint">Klik op de achtergrond of druk op <strong>ESC</strong> om te sluiten.</div>
+    </div>
+  </div>
+
+  <nav>
+    <a class="brand" href="index.html" aria-label="Ga naar home">
+      <img src="FLCI - vertical - black.png" alt="Faith Life logo">
+      <div class="logo-text">FAITH LIFE.</div>
+    </a>
+
+    <!-- Hover menu midden -->
+    <div class="nav-links" aria-label="Visie menu">
+      <a href="#visie" data-spy="visie">Visie</a>
+      <a href="#kern" data-spy="kern">Kern</a>
+      <a href="#5g" data-spy="5g">5G Model</a>
+    </div>
+
+    <div class="nav-right" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Open menu" role="button">
+      <div class="menu-label">Menu</div>
+      <div class="hamburger" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <header class="page-hero">
+    <span class="kicker">Faith Life Church</span>
+    <h1>Visie</h1>
+  </header>
+
+  <section class="section" id="visie">
+    <div class="wrap">
+      <div class="content-grid">
+        <div>
+          <p class="lead">
+            <strong>Faith Life Church is een huis van geloofshelden (A House of Faith Heroes).</strong><br><br>
+            Wij geloven dat iedere gelovige geroepen is om te leven vanuit geloof: niet als toeschouwer,
+            maar als iemand die God vertrouwt, volgt en zichtbaar maakt in het dagelijks leven.
+            Geloofshelden zijn gewone mensen met een groot vertrouwen in een grote God.
+            Wanneer wij ons geloof gebruiken en daarin wandelen, worden bovennatuurlijke dingen zichtbaar in het natuurlijke.
+          </p>
+        </div>
+
+        <aside class="highlight" id="kern">
+          <h3>Kernpunten</h3>
+          <ul class="pill-list">
+            <li class="pill"><span>Huis van geloofshelden</span><span>01</span></li>
+            <li class="pill"><span>Leven vanuit geloof</span><span>02</span></li>
+            <li class="pill"><span>God vertrouwen & volgen</span><span>03</span></li>
+            <li class="pill"><span>Geloof zichtbaar maken</span><span>04</span></li>
+            <li class="pill"><span>Bovennatuurlijk zichtbaar</span><span>05</span></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ✅ 5G MODEL OP VISIE PAGINA -->
+  <section class="values-section" id="5g">
+    <div class="wrap">
+      <div class="values-head">
+        <h2>Ons 5G Model</h2>
+        <p>Wij bouwen onze gemeente aan de hand van het 5G-model. Dit is hoe we leven, groeien en bouwen — samen.</p>
+      </div>
+    </div>
+
+    <div class="values-container">
+      <div class="values-scroll">
+
+        <div class="value-card">
+          <span class="value-num">01</span>
+          <h3>Geloof</h3>
+          <p>Wij leven vanuit geloof in Jezus Christus. Geloof is de basis van alles wat wij doen en de sleutel tot een leven in vrijheid en kracht.</p>
+        </div>
+
+        <div class="value-card">
+          <span class="value-num">02</span>
+          <h3>Groei</h3>
+          <p>Wij geloven in geestelijke groei en discipelschap. Door Gods Woord en de werking van de Heilige Geest worden levens voortdurend vernieuwd.</p>
+        </div>
+
+        <div class="value-card">
+          <span class="value-num">03</span>
+          <h3>Gemeenschap</h3>
+          <p>Wij zijn één geestelijk gezin. In liefde, eenheid en verbondenheid bouwen wij samen aan een gezonde en sterke gemeente.</p>
+        </div>
+
+        <div class="value-card">
+          <span class="value-num">04</span>
+          <h3>Gezonden</h3>
+          <p>Iedere gelovige is geroepen en gezonden. Wij leven ons geloof zichtbaar uit, binnen en buiten de kerk, en brengen hoop waar wij komen.</p>
+        </div>
+
+        <div class="value-card">
+          <span class="value-num">05</span>
+          <h3>Genereus</h3>
+          <p>Wij leven met open handen. Vrijgevigheid is een levensstijl waarmee wij God eren en anderen zegenen.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="quote-band">
+    <div class="wrap">
+      <p class="quote">
+        “Wanneer wij ons geloof gebruiken en daarin wandelen, worden bovennatuurlijke dingen zichtbaar in het natuurlijke.”
+        <small>Faith Life Breda</small>
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Faith Life International BREDA
+  </footer>
+
+  <script>
+    function openMenu() {
+      document.body.classList.add('menu-open');
+      document.getElementById('mobileMenu').classList.add('active');
+      document.getElementById('hamburgerBtn').classList.add('is-open');
+    }
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+      document.getElementById('mobileMenu').classList.remove('active');
+      document.getElementById('hamburgerBtn').classList.remove('is-open');
+    }
+    function toggleMenu() {
+      const isOpen = document.getElementById('mobileMenu').classList.contains('active');
+      if (isOpen) closeMenu();
+      else openMenu();
+    }
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+
+    // Active state in center nav (scroll spy)
+    const spyLinks = document.querySelectorAll('.nav-links a[data-spy]');
+    const sections = [...spyLinks].map(a => document.getElementById(a.getAttribute('data-spy'))).filter(Boolean);
+
+    function setActiveLinkById(id){
+      spyLinks.forEach(a => a.classList.toggle('active', a.getAttribute('data-spy') === id));
+    }
+
+    function spy(){
+      if (!sections.length) return;
+      let current = sections[0].id;
+      const offset = 140;
+      sections.forEach(sec => {
+        const top = sec.getBoundingClientRect().top;
+        if (top <= offset) current = sec.id;
+      });
+      setActiveLinkById(current);
+    }
+
+    window.addEventListener('scroll', spy);
+    window.addEventListener('load', spy);
+
+    spyLinks.forEach(a => {
+      a.addEventListener('click', () => setActiveLinkById(a.getAttribute('data-spy')));
+    });
+  </script>
+</body>
+</html>

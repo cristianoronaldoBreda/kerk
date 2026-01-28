@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Faith Life Breda | Geschiedenis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --dark:#1c1c1c;         /* zoals je “donkergrijs i.p.v. zwart” wens */
+      --muted:#666666;
+      --line:rgba(0,0,0,0.08);
+      --sans:"Helvetica Neue", Helvetica, Arial, sans-serif;
+      --serif:'Playfair Display', serif;
+    }
+
+    *{ box-sizing:border-box; -webkit-font-smoothing: antialiased; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:var(--bg);
+      color:#000;
+      overflow-x:hidden;
+      scroll-behavior:smooth;
+    }
+    body.menu-open{ overflow:hidden; }
+    .wrap{ max-width:1200px; margin:0 auto; padding:0 6vw; }
+
+    /* --- NAV (zelfde vibe als home/online) --- */
+    nav{
+      position: sticky;
+      top:0;
+      z-index:1000;
+      background:#fff;
+      border-bottom:1px solid rgba(0,0,0,0.05);
+      padding: 18px 5vw;
+
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      color:#000;
+      user-select:none;
+    }
+    .brand img{ height:34px; width:auto; display:block; }
+    .brand .logo-text{
+      font-weight:900;
+      font-size: clamp(18px, 4vw, 24px);
+      letter-spacing:-1px;
+      line-height:1;
+      white-space:nowrap;
+    }
+
+    .nav-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      cursor:pointer;
+      padding: 10px 12px;
+      border-radius: 12px;
+      transition: background .2s ease, transform .2s ease;
+    }
+    .nav-right:hover{ background: rgba(0,0,0,0.03); transform: translateY(-1px); }
+
+    .hamburger{ width:24px; height:18px; position:relative; }
+    .hamburger span{
+      position:absolute; left:0;
+      width:24px; height:2px;
+      background:#000;
+      transition: transform .25s ease, top .25s ease, opacity .2s ease;
+    }
+    .hamburger span:nth-child(1){ top:2px; }
+    .hamburger span:nth-child(2){ top:8px; }
+    .hamburger span:nth-child(3){ top:14px; }
+
+    .nav-right.is-open .hamburger span:nth-child(1){ top:8px; transform: rotate(45deg); }
+    .nav-right.is-open .hamburger span:nth-child(2){ opacity:0; }
+    .nav-right.is-open .hamburger span:nth-child(3){ top:8px; transform: rotate(-45deg); }
+
+    /* --- FULLSCREEN MENU --- */
+    .mobile-menu{
+      position:fixed;
+      inset:0;
+      background: rgba(18,18,18,0.94);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display:none;
+      z-index:1500;
+      align-items:center;
+      justify-content:center;
+      padding: 28px 18px;
+    }
+    .mobile-menu.active{ display:flex; }
+    .mobile-menu-inner{
+      width: min(920px, 92vw);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+      text-align:center;
+    }
+    .mobile-menu-title{
+      color: rgba(255,255,255,0.75);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
+    .mobile-menu a{
+      color:#fff;
+      text-decoration:none;
+      text-transform:uppercase;
+      font-weight:900;
+      font-size: clamp(26px, 7vw, 56px);
+      letter-spacing:-0.02em;
+      line-height:1.02;
+      padding: 8px 10px;
+      border-radius: 12px;
+      transition: transform .18s ease, opacity .18s ease;
+      opacity:.92;
+    }
+    .mobile-menu a:hover{ transform: translateY(-2px); opacity:1; }
+    .mobile-hint{
+      margin-top:18px;
+      color: rgba(255,255,255,0.55);
+      font-size:12px;
+      line-height:1.5;
+      padding: 0 8px;
+    }
+
+    /* --- HERO (zonder beige) --- */
+    .hero{
+      padding: clamp(70px, 10vh, 120px) 0 55px;
+      background:#fff;
+    }
+    .kicker{
+      font-family:var(--serif);
+      font-style:italic;
+      font-size: clamp(16px, 3.2vw, 24px);
+      color: var(--muted);
+      margin: 0 0 10px;
+      display:block;
+      font-weight:400;
+      text-align:center;
+    }
+    .hero h1{
+      font-size: clamp(44px, 10vw, 92px);
+      font-weight:900;
+      letter-spacing:-0.055em;
+      line-height:0.9;
+      margin:0 0 18px;
+      text-transform:uppercase;
+      text-align:center;
+    }
+    .hero-lead{
+      max-width: 82ch;
+      margin: 0 auto;
+      font-size: 18px;
+      line-height: 1.9;
+      color: rgba(0,0,0,0.75);
+      text-align:center;
+      font-weight: 600;
+    }
+
+    /* --- CONTENT --- */
+    .section{
+      padding: 60px 0 30px;
+      background:#fff;
+      border-top:1px solid var(--line);
+    }
+
+    .story-grid{
+      display:grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 46px;
+      align-items:start;
+    }
+    @media(max-width:980px){
+      .story-grid{ grid-template-columns:1fr; gap:28px; }
+    }
+
+    .story{
+      font-size: 17px;
+      line-height: 1.95;
+      color: rgba(0,0,0,0.78);
+      font-weight: 600;
+    }
+
+    /* --- TIMELINE (lijn + punten + scroll progress) --- */
+    .timeline{
+      position:relative;
+      padding: 6px 0 6px 0;
+    }
+
+    /* base line */
+    .timeline::before{
+      content:"";
+      position:absolute;
+      left: 14px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(0,0,0,0.12);
+      border-radius: 999px;
+    }
+
+    /* progress line */
+    .timeline-progress{
+      position:absolute;
+      left: 14px;
+      top: 0;
+      width: 2px;
+      height: 0px;            /* JS zet hoogte */
+      background: #000;
+      border-radius: 999px;
+      transform-origin: top;
+    }
+
+    .timeline-item{
+      position:relative;
+      padding-left: 44px;
+      padding-bottom: 22px;
+      margin-bottom: 16px;
+    }
+    .timeline-item:last-child{ padding-bottom: 0; margin-bottom: 0; }
+
+    /* dot */
+    .timeline-item::before{
+      content:"";
+      position:absolute;
+      left: 6px;
+      top: 6px;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background:#fff;
+      border: 2px solid rgba(0,0,0,0.20);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.10);
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .timeline-item.active::before{
+      border-color:#000;
+      background:#000;
+      transform: scale(1.06);
+    }
+
+    .time{
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size: 12px;
+      color: rgba(0,0,0,0.55);
+      margin:0 0 8px;
+    }
+    .timeline-item.active .time{ color: rgba(0,0,0,0.85); }
+
+    .timeline-card{
+      background:#fff;
+      border:1px solid rgba(0,0,0,0.06);
+      border-radius: 16px;
+      padding: 16px 16px;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.06);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .timeline-item.active .timeline-card{
+      transform: translateY(-2px);
+      box-shadow: 0 22px 65px rgba(0,0,0,0.10);
+    }
+
+    .timeline-card p{
+      margin:0;
+      line-height:1.75;
+      font-weight: 650;
+      color: rgba(0,0,0,0.75);
+      font-size: 14px;
+    }
+
+    /* --- QUOTE BAND (donkergrijs, zoals home vibe) --- */
+    .quote-band{
+      background: var(--dark);
+      color:#fff;
+      padding: 80px 0;
+      margin-top: 50px;
+    }
+    .quote{
+      text-align:center;
+      font-size: clamp(22px, 4vw, 38px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.25;
+      max-width: 900px;
+      margin: 0 auto;
+      text-wrap: balance;
+    }
+    .quote small{
+      display:block;
+      margin-top: 16px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size: 12px;
+      opacity: .65;
+    }
+
+    footer{
+      padding:64px 0;
+      text-align:center;
+      background: var(--dark);
+      color:#888;
+      font-size:11px;
+      text-transform:uppercase;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Fullscreen menu overlay -->
+  <div class="mobile-menu" id="mobileMenu" onclick="closeMenu()">
+    <div class="mobile-menu-inner" onclick="event.stopPropagation()">
+      <div class="mobile-menu-title">Pagina’s</div>
+
+      <a href="index.html" onclick="closeMenu()">Home</a>
+      <a href="visie.html" onclick="closeMenu()">Visie</a>
+      <a href="leiders.html" onclick="closeMenu()">Leiders</a>
+      <a href="geschiedenis.html" onclick="closeMenu()">Geschiedenis</a>
+      <a href="geven.html" onclick="closeMenu()">Geven</a>
+      <a href="online-kerk.html" onclick="closeMenu()">Online Kerk</a>
+
+      <div class="mobile-hint">Klik op de achtergrond of druk op <strong>ESC</strong> om te sluiten.</div>
+    </div>
+  </div>
+
+  <nav>
+    <a class="brand" href="index.html">
+      <img src="FLCI - vertical - black.png" alt="Faith Life logo">
+      <div class="logo-text">FAITH LIFE.</div>
+    </a>
+
+    <div class="nav-right" id="hamburgerBtn" onclick="toggleMenu()">
+      <div class="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="wrap">
+      <span class="kicker">Faith Life Church</span>
+      <h1>Geschiedenis</h1>
+      <p class="hero-lead">
+        Faith Life Church ontstond in 2020, midden in de COVID-periode.
+        Wat begon als een stap van geloof, groeide uit tot een kerk waar vandaag honderden mensen samenkomen.
+      </p>
+    </div>
+  </header>
+
+  <!-- STORY + TIMELINE -->
+  <section class="section" id="story">
+    <div class="wrap">
+      <div class="story-grid">
+
+        <div class="story">
+          Faith Life Church ontstond in 2020, midden in de COVID-periode. Terwijl alles gesloten was,
+          sprak God tot Andrew met een duidelijke opdracht: begin revivaldiensten in het Stadspark Valkenberg.
+          <br><br>
+          Wekelijks kwamen mensen samen en het park vulde zich met mensen die genezing, wonderen en levensverandering ervaarden.
+          <br><br>
+          In datzelfde jaar gaf God de opdracht om een kerk te planten. Zo werd Faith Life Church opgericht.
+          <br><br>
+          Vandaag komen wekelijks honderden mensen samen om Gods Woord te horen en te ervaren.
+          Door de kracht van Jezus worden levens vernieuwd en harten getransformeerd.
+        </div>
+
+        <aside class="timeline" id="timeline">
+          <div class="timeline-progress" id="timelineProgress"></div>
+
+          <div class="timeline-item" data-step>
+            <div class="time">2020</div>
+            <div class="timeline-card">
+              <p>God spreekt tot Andrew: begin revivaldiensten in Stadspark Valkenberg.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-step>
+            <div class="time">2020</div>
+            <div class="timeline-card">
+              <p>Wekelijkse samenkomsten — genezing, wonderen en levensverandering.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-step>
+            <div class="time">2020</div>
+            <div class="timeline-card">
+              <p>De opdracht om een kerk te planten — Faith Life Church wordt opgericht.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-step>
+            <div class="time">Vandaag</div>
+            <div class="timeline-card">
+              <p>Honderden mensen komen samen om Gods Woord te horen en Zijn kracht te ervaren.</p>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="quote-band">
+    <p class="quote">
+      “Wat begon als een stap van geloof, werd een beweging van leven en hoop.”
+      <small>Faith Life Breda</small>
+    </p>
+  </section>
+
+  <footer>
+    © 2026 Faith Life International BREDA
+  </footer>
+
+  <script>
+    // MENU
+    function openMenu() {
+      document.body.classList.add('menu-open');
+      document.getElementById('mobileMenu').classList.add('active');
+      document.getElementById('hamburgerBtn').classList.add('is-open');
+    }
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+      document.getElementById('mobileMenu').classList.remove('active');
+      document.getElementById('hamburgerBtn').classList.remove('is-open');
+    }
+    function toggleMenu() {
+      const isOpen = document.getElementById('mobileMenu').classList.contains('active');
+      if (isOpen) closeMenu();
+      else openMenu();
+    }
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+
+    // TIMELINE: active items + progress line
+    const timeline = document.getElementById("timeline");
+    const progressEl = document.getElementById("timelineProgress");
+    const steps = [...document.querySelectorAll("[data-step]")];
+
+    // highlight active (intersection observer)
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add("active");
+      });
+    }, { threshold: 0.35 });
+
+    steps.forEach(s => io.observe(s));
+
+    // progress based on scroll
+    function updateProgress(){
+      const rect = timeline.getBoundingClientRect();
+
+      // viewport top -> timeline top
+      const start = window.innerHeight * 0.18;        // start a bit below top
+      const end = window.innerHeight * 0.82;          // end a bit above bottom
+
+      // clamp progress from 0..1 based on how far timeline is within view
+      const total = (rect.height + (end - start));
+      const passed = (start - rect.top);
+      const t = Math.max(0, Math.min(1, passed / total));
+
+      progressEl.style.height = (t * rect.height) + "px";
+    }
+
+    window.addEventListener("scroll", updateProgress, { passive:true });
+    window.addEventListener("resize", updateProgress);
+    window.addEventListener("load", updateProgress);
+  </script>
+
+</body>
+</html>

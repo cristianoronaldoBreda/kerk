@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Faith Life Breda | Online Kerk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+
+      /* minder hard zwart */
+      --dark:#1c1c1c;
+
+      --muted:#666666;
+
+      /* NIEUW: warmer/lichter beige (minder grijzig) */
+      --accent:#efe4d6;      /* buttons/soft accents */
+      --soft:#f7f2eb;        /* section background */
+
+      --line:rgba(0,0,0,0.08);
+      --sans:"Helvetica Neue", Helvetica, Arial, sans-serif;
+      --serif:'Playfair Display', serif;
+
+      /* give banner (home vibe) */
+      --green-give:#e1f5cc;
+    }
+
+    *{ box-sizing:border-box; -webkit-font-smoothing: antialiased; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:var(--bg);
+      color:#000;
+      overflow-x:hidden;
+      scroll-behavior:smooth;
+    }
+    body.menu-open{ overflow:hidden; }
+    .wrap{ max-width:1400px; margin:0 auto; padding:0 6vw; }
+
+    /* --- NAV (home style) --- */
+    nav{
+      padding:20px 5vw;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:#fff;
+      position: sticky;
+      top:0;
+      z-index:1000;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      color:#000;
+    }
+    .brand img{ height:36px; width:auto; display:block; }
+    .brand span{
+      font-weight:900;
+      font-size:22px;
+      letter-spacing:-1px;
+      line-height:1;
+      white-space:nowrap;
+    }
+
+    .nav-right{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      cursor:pointer;
+      transition: transform .2s ease, background .2s ease;
+      padding: 10px 12px;
+      border-radius: 12px;
+    }
+    .nav-right:hover{
+      transform: translateY(-1px);
+      background: rgba(0,0,0,0.03);
+    }
+
+    .hamburger{ display:flex; flex-direction:column; gap:5px; }
+    .hamburger span{
+      width:22px; height:2px; background:#000;
+      transition:.25s;
+    }
+
+    /* --- FULL MENU (klik buiten sluit) --- */
+    .mobile-menu{
+      position:fixed;
+      inset:0;
+      background: rgba(20,20,20,0.95);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transform: translateX(100%);
+      transition:.45s ease;
+      z-index:2000;
+    }
+    .mobile-menu.active{ transform: translateX(0); }
+
+    .mobile-menu-inner{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:18px;
+      text-align:center;
+      padding: 20px;
+    }
+    .mobile-menu a{
+      font-size: clamp(30px, 7vw, 65px);
+      font-weight:900;
+      text-transform:uppercase;
+      text-decoration:none;
+      color:#fff;
+      transition:.2s;
+      opacity:.95;
+    }
+    .mobile-menu a:hover{
+      opacity:.65;
+      transform: translateY(-2px);
+    }
+
+    /* --- HERO ONLINE --- */
+    .hero-online{
+      background: var(--dark);
+      color:#fff;
+      padding: clamp(90px, 14vh, 150px) 0 75px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-online::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 18% 22%, rgba(239,228,214,0.22), transparent 62%),
+        radial-gradient(circle at 80% 30%, rgba(239,228,214,0.12), transparent 65%),
+        radial-gradient(circle at 55% 90%, rgba(239,228,214,0.08), transparent 55%);
+      z-index:0;
+    }
+
+    .hero-content{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap:56px;
+      align-items:center;
+    }
+    @media(max-width:980px){
+      .hero-content{ grid-template-columns:1fr; text-align:center; gap:34px; }
+    }
+
+    .kicker{
+      font-family:var(--serif);
+      font-style:italic;
+      font-size: clamp(16px, 3vw, 22px);
+      color: rgba(255,255,255,0.70);
+      display:block;
+      margin-bottom: 10px;
+    }
+
+    .hero-content h1{
+      font-size: clamp(50px, 9vw, 95px);
+      font-weight:900;
+      text-transform:uppercase;
+      line-height:0.9;
+      margin:0;
+      letter-spacing:-0.05em;
+    }
+
+    .hero-content p{
+      margin-top:18px;
+      font-size:18px;
+      line-height:1.85;
+      color:rgba(255,255,255,0.78);
+      max-width:62ch;
+    }
+    @media(max-width:980px){
+      .hero-content p{ margin-left:auto; margin-right:auto; }
+    }
+
+    .cta-row{
+      margin-top:26px;
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+    @media(max-width:980px){
+      .cta-row{ justify-content:center; }
+    }
+
+    .btn{
+      padding:16px 24px;
+      font-weight:900;
+      text-transform:uppercase;
+      text-decoration:none;
+      border-radius:14px;
+      letter-spacing:.10em;
+      font-size:12px;
+      transition:.25s;
+      display:inline-block;
+      border: 1px solid rgba(255,255,255,0.20);
+    }
+    .btn-primary{
+      background:#fff;
+      color:#000;
+      border-color:#fff;
+    }
+    .btn-primary:hover{ transform: translateY(-3px); opacity:.92; }
+    .btn-outline{ color:#fff; background:transparent; }
+    .btn-outline:hover{ background: rgba(255,255,255,0.10); transform: translateY(-3px); }
+
+    /* --- PLAYER --- */
+    .player-shell{
+      position:relative;
+    }
+    .video-feature{
+      border-radius:22px;
+      overflow:hidden;
+      box-shadow: 0 30px 90px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.10);
+      aspect-ratio: 16/9;
+      background:#000;
+      position:relative;
+    }
+    iframe{ width:100%; height:100%; border:0; display:block; }
+
+    /* subtle frame */
+    .frame-glow{
+      position:absolute;
+      inset:-10px;
+      border-radius: 26px;
+      pointer-events:none;
+      background: radial-gradient(600px 260px at 20% 20%, rgba(239,228,214,0.18), transparent 60%);
+      filter: blur(10px);
+      z-index:-1;
+    }
+
+    .now-playing{
+      margin-top: 14px;
+      color: rgba(255,255,255,0.70);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-size: 11px;
+    }
+    .now-title{
+      margin-top: 8px;
+      font-weight: 900;
+      letter-spacing:-0.02em;
+      font-size: 18px;
+      line-height: 1.25;
+      color: #fff;
+    }
+
+    /* --- STICKY JUMP BUTTONS --- */
+    .sticky-jump{
+      position: sticky;
+      top: 76px;
+      z-index: 900;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .jump-row{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      padding: 12px 6vw;
+      flex-wrap:wrap;
+    }
+    .jump{
+      display:inline-block;
+      padding: 12px 14px;
+      border-radius: 999px;
+      background:#fff;
+      border:1px solid rgba(0,0,0,0.10);
+      text-decoration:none;
+      color:#000;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      font-size: 11px;
+      transition:.2s;
+    }
+    .jump:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+    }
+
+    /* --- SECTIONS --- */
+    .section{
+      padding: 95px 0;
+      background:#fff;
+      position:relative;
+    }
+    .section.alt{
+      background: var(--soft);
+      border-top: 1px solid rgba(0,0,0,0.05);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .section-title{
+      font-size: clamp(34px, 5.5vw, 58px);
+      font-weight:900;
+      text-transform:uppercase;
+      margin: 0 0 14px;
+      text-align:center;
+      letter-spacing:-0.04em;
+    }
+    .section-sub{
+      text-align:center;
+      color: var(--muted);
+      font-weight: 700;
+      line-height: 1.7;
+      margin: 0 auto 46px;
+      max-width: 84ch;
+    }
+
+    /* --- GRID --- */
+    .video-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap:26px;
+    }
+    .video-card{
+      border-radius:18px;
+      overflow:hidden;
+      background:#fff;
+      border:1px solid rgba(0,0,0,0.06);
+      transition:.25s;
+      cursor:pointer;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.06);
+    }
+    .video-card:hover{
+      transform: translateY(-7px);
+      box-shadow: 0 28px 70px rgba(0,0,0,0.10);
+    }
+    .thumb{
+      width:100%;
+      aspect-ratio: 16/9;
+      object-fit:cover;
+      display:block;
+      background:#000;
+      filter: contrast(1.03);
+    }
+    .video-info{ padding:18px; }
+    .video-info strong{
+      display:block;
+      font-weight:900;
+      text-transform:uppercase;
+      font-size:13px;
+      line-height:1.3;
+      letter-spacing: .02em;
+    }
+    .video-info span{
+      display:block;
+      margin-top:8px;
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.10em;
+    }
+
+    /* --- PLAYLISTS --- */
+    .playlist-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 22px;
+      margin-top: 10px;
+    }
+    .playlist-card{
+      border-radius: 18px;
+      background:#fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 22px;
+      box-shadow: 0 16px 46px rgba(0,0,0,0.06);
+      transition:.25s;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+    .playlist-card:hover{
+      transform: translateY(-6px);
+      box-shadow: 0 28px 80px rgba(0,0,0,0.10);
+    }
+    .playlist-top{
+      display:flex;
+      gap: 12px;
+      align-items:center;
+    }
+    .playlist-thumb{
+      width: 98px;
+      aspect-ratio: 16/9;
+      border-radius: 12px;
+      overflow:hidden;
+      background:#000;
+      border: 1px solid rgba(0,0,0,0.08);
+      flex: 0 0 auto;
+    }
+    .playlist-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .playlist-card strong{
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-size: 12px;
+      line-height: 1.2;
+    }
+    .playlist-card p{
+      margin:0;
+      color: rgba(0,0,0,0.70);
+      font-weight: 700;
+      line-height: 1.65;
+      font-size: 14px;
+    }
+    .pill-link{
+      text-decoration:none;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .10em;
+      font-size: 11px;
+      color:#000;
+      border-bottom: 2px solid #000;
+      width: fit-content;
+      padding-bottom: 2px;
+    }
+
+    /* --- GIVE BANNER (zoals home) --- */
+    .give-banner{
+      background: var(--green-give);
+      color:#000;
+      margin: 90px 5vw 0;
+      padding: clamp(40px, 8vw, 80px);
+      border-radius: 10px;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:20px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.08);
+    }
+    @media (min-width: 768px){
+      .give-banner{ flex-direction:row; justify-content:space-between; align-items:center; }
+    }
+    .give-banner h2{
+      text-transform:uppercase;
+      font-size: clamp(30px, 6vw, 58px);
+      font-weight:900;
+      margin:0;
+      letter-spacing:-2px;
+      line-height:1;
+    }
+    .give-banner p{
+      margin-top: 14px;
+      font-weight: 700;
+      color: rgba(0,0,0,0.78);
+      line-height:1.7;
+      max-width: 60ch;
+    }
+    .btn-give-link{
+      font-weight:900;
+      text-decoration:none;
+      color:#000;
+      border-bottom: 2px solid #000;
+      font-size: 18px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      transition:.2s;
+      padding-bottom:4px;
+      white-space:nowrap;
+    }
+    .btn-give-link:hover{ opacity:.75; transform: translateY(-1px); }
+
+    /* --- FOOTER --- */
+    footer{
+      padding:80px 0;
+      text-align:center;
+      background:var(--dark);
+      color:#888;
+      font-size:11px;
+      text-transform:uppercase;
+      margin-top: 80px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Menu overlay -->
+  <div class="mobile-menu" id="mobileMenu" onclick="closeMenu()">
+    <div class="mobile-menu-inner" onclick="event.stopPropagation()">
+      <a href="index.html">Home</a>
+      <a href="visie.html">Visie</a>
+      <a href="leiders.html">Leiders</a>
+      <a href="geschiedenis.html">Geschiedenis</a>
+      <a href="geven.html">Geven</a>
+      <a href="online-kerk.html">Online Kerk</a>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <nav>
+    <a class="brand" href="index.html">
+      <img src="FLCI - vertical - black.png" alt="logo">
+      <span>FAITH LIFE.</span>
+    </a>
+
+    <div class="nav-right" onclick="toggleMenu()" aria-label="Open menu">
+      <div class="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <!-- HERO ONLINE -->
+  <section class="hero-online" id="top">
+    <div class="wrap hero-content">
+
+      <div>
+        <span class="kicker">Faith Life Online</span>
+        <h1>Online Kerk</h1>
+        <p>
+          Alles onder elkaar. Gebruik de knoppen om direct naar Preken, Livestreams of Playlists te springen.
+          Klik op een video om direct te starten.
+        </p>
+
+        <div class="cta-row">
+          <a href="#preken" class="btn btn-primary">Preken ↓</a>
+          <a href="#livestreams" class="btn btn-outline">Livestreams ↓</a>
+          <a href="#playlists" class="btn btn-outline">Playlists ↓</a>
+        </div>
+      </div>
+
+      <!-- Featured Player -->
+      <div class="player-shell">
+        <div class="frame-glow"></div>
+        <div class="video-feature">
+          <iframe
+            id="player"
+            src="https://www.youtube.com/embed/DZCAgWX9fWo?rel=0&modestbranding=1"
+            title="Faith Life Online Player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <div class="now-playing" id="nowType">Nu aan het kijken</div>
+        <div class="now-title" id="nowTitle">Livestream #1</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STICKY JUMP BUTTONS -->
+  <div class="sticky-jump">
+    <div class="jump-row">
+      <a class="jump" href="#preken">Preken</a>
+      <a class="jump" href="#livestreams">Livestreams</a>
+      <a class="jump" href="#playlists">Playlists</a>
+      <a class="jump" href="#give">Geef</a>
+      <a class="jump" href="#top">Naar boven</a>
+    </div>
+  </div>
+
+  <!-- PREKEN -->
+  <section class="section" id="preken">
+    <div class="wrap">
+      <h2 class="section-title">Preken</h2>
+      <p class="section-sub">Klik op een preek om direct in de player bovenaan te kijken.</p>
+
+      <div class="video-grid">
+        <div class="video-card" onclick="playVideo('GkwnTJMAAxY','Preek #1','Preek')">
+          <img class="thumb" src="https://i.ytimg.com/vi/GkwnTJMAAxY/hqdefault.jpg" alt="Preek 1 thumbnail">
+          <div class="video-info"><strong>Preek #1</strong><span>Klik om te kijken</span></div>
+        </div>
+
+        <div class="video-card" onclick="playVideo('7sfZh8IqLWc','Preek #2','Preek')">
+          <img class="thumb" src="https://i.ytimg.com/vi/7sfZh8IqLWc/hqdefault.jpg" alt="Preek 2 thumbnail">
+          <div class="video-info"><strong>Preek #2</strong><span>Klik om te kijken</span></div>
+        </div>
+
+        <div class="video-card" onclick="playVideo('_IJXtnxZV2E','Preek #3','Preek')">
+          <img class="thumb" src="https://i.ytimg.com/vi/_IJXtnxZV2E/hqdefault.jpg" alt="Preek 3 thumbnail">
+          <div class="video-info"><strong>Preek #3</strong><span>Klik om te kijken</span></div>
+        </div>
+
+        <div class="video-card" onclick="playVideo('E6u04NDE1qY','Preek #4','Preek')">
+          <img class="thumb" src="https://i.ytimg.com/vi/E6u04NDE1qY/hqdefault.jpg" alt="Preek 4 thumbnail">
+          <div class="video-info"><strong>Preek #4</strong><span>Klik om te kijken</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVESTREAMS -->
+  <section class="section alt" id="livestreams">
+    <div class="wrap">
+      <h2 class="section-title">Livestreams</h2>
+      <p class="section-sub">Klik op een livestream om direct te starten.</p>
+
+      <div class="video-grid">
+        <div class="video-card" onclick="playVideo('DZCAgWX9fWo','Livestream #1','Livestream')">
+          <img class="thumb" src="https://i.ytimg.com/vi/DZCAgWX9fWo/hqdefault.jpg" alt="Livestream 1 thumbnail">
+          <div class="video-info"><strong>Livestream #1</strong><span>Klik om te kijken</span></div>
+        </div>
+
+        <div class="video-card" onclick="playVideo('alub_g8VvPE','Livestream #2','Livestream')">
+          <img class="thumb" src="https://i.ytimg.com/vi/alub_g8VvPE/hqdefault.jpg" alt="Livestream 2 thumbnail">
+          <div class="video-info"><strong>Livestream #2</strong><span>Klik om te kijken</span></div>
+        </div>
+
+        <div class="video-card" onclick="playVideo('ybBZ8MOsGxU','Livestream #3','Livestream')">
+          <img class="thumb" src="https://i.ytimg.com/vi/ybBZ8MOsGxU/hqdefault.jpg" alt="Livestream 3 thumbnail">
+          <div class="video-info"><strong>Livestream #3</strong><span>Klik om te kijken</span></div>
+        </div>
+
+        <div class="video-card" onclick="playVideo('NviE5DG5wTI','Livestream #4','Livestream')">
+          <img class="thumb" src="https://i.ytimg.com/vi/NviE5DG5wTI/hqdefault.jpg" alt="Livestream 4 thumbnail">
+          <div class="video-info"><strong>Livestream #4</strong><span>Klik om te kijken</span></div>
+        </div>
+
+        <div class="video-card" onclick="playVideo('3WbQjmcA0BY','Livestream #5','Livestream')">
+          <img class="thumb" src="https://i.ytimg.com/vi/3WbQjmcA0BY/hqdefault.jpg" alt="Livestream 5 thumbnail">
+          <div class="video-info"><strong>Livestream #5</strong><span>Klik om te kijken</span></div>
+        </div>
+
+        <div class="video-card" onclick="playVideo('NyiHzpKXl4Y','Livestream #6','Livestream')">
+          <img class="thumb" src="https://i.ytimg.com/vi/NyiHzpKXl4Y/hqdefault.jpg" alt="Livestream 6 thumbnail">
+          <div class="video-info"><strong>Livestream #6</strong><span>Klik om te kijken</span></div>
+        </div>
+
+        <div class="video-card" onclick="playVideo('i5471WRfhho','Livestream #7','Livestream')">
+          <img class="thumb" src="https://i.ytimg.com/vi/i5471WRfhho/hqdefault.jpg" alt="Livestream 7 thumbnail">
+          <div class="video-info"><strong>Livestream #7</strong><span>Klik om te kijken</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLAYLISTS -->
+  <section class="section" id="playlists">
+    <div class="wrap">
+      <h2 class="section-title">Playlists</h2>
+      <p class="section-sub">Open een serie op YouTube en kijk alles terug.</p>
+
+      <div class="playlist-grid">
+        <div class="playlist-card">
+          <div class="playlist-top">
+            <div class="playlist-thumb">
+              <img src="https://i.ytimg.com/vi/bkFHimqISnw/hqdefault.jpg" alt="Playlist thumbnail">
+            </div>
+            <div>
+              <strong>Playlist #1</strong>
+              <p>Serie op YouTube</p>
+            </div>
+          </div>
+          <a class="pill-link" target="_blank" rel="noopener"
+             href="https://www.youtube.com/playlist?list=PLh1Gt1cQy3_Ca9yDiJycpGG8xe1KWrrNC">Open playlist →</a>
+        </div>
+
+        <div class="playlist-card">
+          <div class="playlist-top">
+            <div class="playlist-thumb">
+              <img src="https://i.ytimg.com/vi/GrDx1sG0Y-U/hqdefault.jpg" alt="Playlist thumbnail">
+            </div>
+            <div>
+              <strong>Playlist #2</strong>
+              <p>Serie op YouTube</p>
+            </div>
+          </div>
+          <a class="pill-link" target="_blank" rel="noopener"
+             href="https://www.youtube.com/playlist?list=PLh1Gt1cQy3_DtajIDLy_9WETlurzIC3LZ">Open playlist →</a>
+        </div>
+
+        <div class="playlist-card">
+          <div class="playlist-top">
+            <div class="playlist-thumb">
+              <img src="https://i.ytimg.com/vi/-FJIIaQ2_GE/hqdefault.jpg" alt="Playlist thumbnail">
+            </div>
+            <div>
+              <strong>Playlist #3</strong>
+              <p>Serie op YouTube</p>
+            </div>
+          </div>
+          <a class="pill-link" target="_blank" rel="noopener"
+             href="https://www.youtube.com/playlist?list=PLh1Gt1cQy3_AIQ3jb9N70EyL_sSiPxg2P">Open playlist →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GIVE (zoals home) -->
+  <section id="give">
+    <div class="give-banner">
+      <div>
+        <h2>Online geven</h2>
+        <p>Jouw vrijgevigheid maakt impact. Door Faith Life financieel te ondersteunen, maak je het mogelijk dat mensen Jezus leren kennen.</p>
+      </div>
+      <a href="geven.html" class="btn-give-link">Geef nu →</a>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Faith Life International BREDA
+  </footer>
+
+  <script>
+    // MENU
+    function toggleMenu(){
+      document.getElementById("mobileMenu").classList.toggle("active");
+      document.body.classList.toggle("menu-open");
+    }
+    function closeMenu(){
+      document.getElementById("mobileMenu").classList.remove("active");
+      document.body.classList.remove("menu-open");
+    }
+    window.addEventListener("keydown", (e) => { if(e.key === "Escape") closeMenu(); });
+
+    // PLAYER
+    function playVideo(id, title, type){
+      const player = document.getElementById("player");
+      player.src = "https://www.youtube.com/embed/" + encodeURIComponent(id) + "?autoplay=1&rel=0&modestbranding=1";
+      document.getElementById("nowTitle").textContent = title;
+      document.getElementById("nowType").textContent = "Nu aan het kijken • " + type;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  </script>
+
+</body>
+</html>
